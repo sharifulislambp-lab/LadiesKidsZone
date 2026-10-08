@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>LADIES & KIDS ZONE</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#fff7fc;color:#35104f}
+:root{--pink:#e6009e;--purple:#5410a8;--blue:#1d67e8;--green:#13a65a;--orange:#ff8a00}
+.top{background:linear-gradient(135deg,#ed008f,#7410bd 55%,#165fe8);color:#fff;padding:20px 16px 16px;border-radius:0 0 28px 28px;box-shadow:0 5px 18px #8d2aa655}
+.brand{font-size:27px;font-weight:900;text-align:center;letter-spacing:.5px}.tag{text-align:center;font-size:14px;margin-top:5px}.phone{text-align:center;margin-top:9px;font-size:17px;font-weight:bold}
+main{padding:14px 12px 88px}.screen{display:none}.screen.active{display:block}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{border-radius:17px;padding:15px;color:white;box-shadow:0 5px 13px #4b0d5a18}.card b{font-size:21px;display:block;margin-top:6px}.pink{background:linear-gradient(135deg,#e90098,#a300d8)}.blue{background:linear-gradient(135deg,#1b74ec,#4534d8)}.green{background:linear-gradient(135deg,#0aa86a,#19b65d)}.orange{background:linear-gradient(135deg,#ff9d00,#f05b00)}
+.section{background:#fff;border-radius:18px;padding:14px;margin-top:14px;box-shadow:0 3px 15px #8a4d9d16}.section h3{margin:0 0 10px;color:#6b1298}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.btn{border:0;border-radius:12px;padding:12px;font-weight:bold;background:#f2e4ff;color:#5a0c96}.btn.primary{background:linear-gradient(135deg,#ed008f,#7410bd);color:#fff}.btn.green{color:#fff}.btn.red{background:#ffe2eb;color:#c40045}
+input,select{width:100%;padding:12px;border:1px solid #e3cbe9;border-radius:11px;margin:5px 0;font-size:15px;background:#fff}.row{display:flex;gap:8px}.row>*{flex:1}
+.item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #f0e1f5}.item:last-child{border:0}.small{font-size:12px;color:#86638f}.price{font-weight:bold;color:#d0008b}.empty{text-align:center;color:#8e7597;padding:20px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8d8ee;display:grid;grid-template-columns:repeat(5,1fr);z-index:5}.nav button{border:0;background:#fff;padding:9px 3px;color:#775b84;font-size:11px}.nav button.active{color:#e00091;font-weight:bold}.nav span{display:block;font-size:20px;margin-bottom:2px}
+.search{margin-bottom:8px}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#f4ddff;color:#7610a2;font-size:12px}
+.total{font-size:22px;font-weight:900;color:#df008d;text-align:right;padding:8px}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:10}.modal.show{display:flex}.sheet{background:#fff;width:100%;border-radius:25px 25px 0 0;padding:18px;max-height:88vh;overflow:auto}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">LADIES & KIDS ZONE</div><div class="tag">শুধুমাত্র মহিলা ও বাচ্চাদের জন্য</div><div class="phone">📞 01952-169916</div></header>
+<main>
+<section id="home" class="screen active">
+ <div class="section"><h3>স্বাগতম 👋</h3><div class="small">আপনার দোকানের দৈনিক হিসাব এক জায়গায়</div></div>
+ <div class="cards" style="margin-top:12px">
+  <div class="card pink">আজকের বিক্রি<b id="todaySale">৳ 0</b></div>
+  <div class="card orange">আজকের খরচ<b id="todayExpense">৳ 0</b></div>
+  <div class="card blue">মোট লাভ<b id="profit">৳ 0</b></div>
+  <div class="card green">মোট বাকি<b id="due">৳ 0</b></div>
+ </div>
+ <div class="section"><h3>দ্রুত কাজ</h3><div class="grid">
+  <button class="btn primary" onclick="openSale()">🛒 নতুন বিক্রি</button>
+  <button class="btn" onclick="show('products')">📦 পণ্য যোগ</button>
+  <button class="btn" onclick="show('customers')">👥 কাস্টমার</button>
+  <button class="btn" onclick="openExpense()">💸 খরচ যোগ</button>
+ </div></div>
+</section>
+
+<section id="products" class="screen">
+ <div class="section"><h3>📦 পণ্য ও স্টক</h3><input id="pSearch" class="search" placeholder="পণ্য খুঁজুন..." oninput="renderProducts()"><button class="btn primary" onclick="openProduct()">＋ নতুন পণ্য</button><div id="productList"></div></div>
+</section>
+
+<section id="sales" class="screen">
+ <div class="section"><h3>🧾 বিক্রি / Invoice</h3><button class="btn primary" onclick="openSale()">＋ নতুন বিক্রি</button><div id="salesList"></div></div>
+</section>
+
+<section id="customers" class="screen">
+ <div class="section"><h3>👥 কাস্টমার</h3><button class="btn primary" onclick="openCustomer()">＋ নতুন কাস্টমার</button><div id="customerList"></div></div>
+</section>
+
+<section id="reports" class="screen">
+ <div class="section"><h3>📊 রিপোর্ট</h3><div class="cards"><div class="card pink">মোট বিক্রি<b id="rSale">৳ 0</b></div><div class="card orange">মোট খরচ<b id="rExp">৳ 0</b></div><div class="card blue">নিট<b id="rNet">৳ 0</b></div><div class="card green">পণ্য<b id="rProducts">0</b></div></div></div>
+ <div class="section"><h3>ℹ️ দোকানের তথ্য</h3><p><b>LADIES & KIDS ZONE</b><br>মোবাইল: 01952-169916<br>বাঘারপাড়া, যশোর</p></div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" onclick="show('home',this)"><span>🏠</span>হোম</button>
+ <button onclick="show('products',this)"><span>🛍️</span>পণ্য</button>
+ <button onclick="show('sales',this)"><span>🧾</span>বিক্রি</button>
+ <button onclick="show('customers',this)"><span>👥</span>কাস্টমার</button>
+ <button onclick="show('reports',this)"><span>📊</span>রিপোর্ট</button>
+</nav>
+
+<div id="modal" class="modal"><div class="sheet" id="sheet"></div></div>
+<script>
+const KEY='lkz_v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{products:[],sales:[],customers:[],expenses:[]};
+function save(){localStorage.setItem(KEY,JSON.stringify(db));refresh()}
+function money(n){return '৳ '+Number(n||0).toLocaleString('bn-BD')}
+function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');refresh()}
+function modal(html){document.getElementById('sheet').innerHTML=html;document.getElementById('modal').classList.add('show')}
+function closeM(){document.getElementById('modal').classList.remove('show')}
+function today(){return new Date().toISOString().slice(0,10)}
+function refresh(){renderProducts();renderSales();renderCustomers();renderHome();renderReports()}
+function renderHome(){let t=today(),s=db.sales.filter(x=>x.date===t).reduce((a,x)=>a+x.total,0),e=db.expenses.filter(x=>x.date===t).reduce((a,x)=>a+x.amount,0),all=db.sales.reduce((a,x)=>a+x.total,0),ex=db.expenses.reduce((a,x)=>a+x.amount,0),due=db.sales.reduce((a,x)=>a+(x.due||0),0);todaySale.textContent=money(s);todayExpense.textContent=money(e);profit.textContent=money(all-ex);document.getElementById('due').textContent=money(due)}
+function renderReports(){let s=db.sales.reduce((a,x)=>a+x.total,0),e=db.expenses.reduce((a,x)=>a+x.amount,0);rSale.textContent=money(s);rExp.textContent=money(e);rNet.textContent=money(s-e);rProducts.textContent=db.products.length}
+function renderProducts(){let q=(document.getElementById('pSearch')?.value||'').toLowerCase();let a=db.products.filter(x=>x.name.toLowerCase().includes(q));productList.innerHTML=a.length?a.map(x=>`<div class="item"><div><b>${x.name}</b><div class="small">${x.category||'অন্যান্য'} · স্টক: ${x.stock}</div></div><div class="price">${money(x.price)} <button class="btn red" onclick="delProduct('${x.id}')">×</button></div></div>`).join(''):'<div class="empty">কোনো পণ্য নেই</div>'}
+function renderSales(){salesList.innerHTML=db.sales.slice().reverse().map(x=>`<div class="item"><div><b>Invoice #${x.id}</b><div class="small">${x.date} · ${x.customer||'Walk-in'}</div></div><div class="price">${money(x.total)}</div></div>`).join('')||'<div class="empty">এখনও কোনো বিক্রি নেই</div>'}
+function renderCustomers(){customerList.innerHTML=db.customers.map(x=>`<div class="item"><div><b>${x.name}</b><div class="small">${x.phone||''}</div></div><span class="pill">বাকি ${money(x.due||0)}</span></div>`).join('')||'<div class="empty">কোনো কাস্টমার নেই</div>'}
+function openProduct(){modal(`<h3>নতুন পণ্য</h3><input id="pn" placeholder="পণ্যের নাম"><input id="pc" placeholder="ক্যাটাগরি"><div class="row"><input id="pp" type="number" placeholder="বিক্রয় মূল্য"><input id="ps" type="number" placeholder="স্টক"></div><button class="btn primary" onclick="addProduct()">সংরক্ষণ</button> <button class="btn" onclick="closeM()">বাতিল</button>`)}
+function addProduct(){let n=pn.value.trim();if(!n)return alert('পণ্যের নাম দিন');db.products.push({id:Date.now(),name:n,category:pc.value,price:+pp.value||0,stock:+ps.value||0});save();closeM()}
+function delProduct(id){if(confirm('পণ্যটি মুছে ফেলবেন?')){db.products=db.products.filter(x=>x.id!=id);save()}}
+function openCustomer(){modal(`<h3>নতুন কাস্টমার</h3><input id="cn" placeholder="নাম"><input id="cp" placeholder="মোবাইল"><input id="cd" type="number" placeholder="বাকি"><button class="btn primary" onclick="addCustomer()">সংরক্ষণ</button> <button class="btn" onclick="closeM()">বাতিল</button>`)}
+function addCustomer(){if(!cn.value.trim())return alert('নাম দিন');db.customers.push({id:Date.now(),name:cn.value.trim(),phone:cp.value,due:+cd.value||0});save();closeM()}
+function openExpense(){modal(`<h3>খরচ যোগ করুন</h3><input id="en" placeholder="খরচের বিবরণ"><input id="ea" type="number" placeholder="টাকার পরিমাণ"><button class="btn primary" onclick="addExpense()">সংরক্ষণ</button> <button class="btn" onclick="closeM()">বাতিল</button>`)}
+function addExpense(){let a=+ea.value||0;if(a<=0)return alert('সঠিক পরিমাণ দিন');db.expenses.push({id:Date.now(),date:today(),name:en.value,amount:a});save();closeM()}
+function openSale(){if(!db.products.length)return alert('আগে পণ্য যোগ করুন');let opts=db.products.map(x=>`<option value="${x.id}">${x.name} — ${money(x.price)} (স্টক ${x.stock})</option>`).join('');modal(`<h3>নতুন বিক্রি</h3><select id="sp">${opts}</select><input id="sq" type="number" value="1" min="1" placeholder="পরিমাণ"><input id="sc" placeholder="কাস্টমারের নাম (ঐচ্ছিক)"><input id="sd" type="number" value="0" placeholder="বাকি"><div class="total" id="salePreview">৳ 0</div><button class="btn primary" onclick="addSale()">বিক্রি সম্পন্ন করুন</button> <button class="btn" onclick="closeM()">বাতিল</button>`);sp.onchange=preview;sq.oninput=preview;preview()}
+function preview(){let p=db.products.find(x=>x.id==sp.value);salePreview.textContent=money((p?.price||0)*(+sq.value||1))}
+function addSale(){let p=db.products.find(x=>x.id==sp.value),q=+sq.value||1;if(!p||q>p.stock)return alert('স্টক পর্যাপ্ত নেই');let total=p.price*q,due=+sd.value||0;p.stock-=q;db.sales.push({id:String(Date.now()).slice(-8),date:today(),customer:sc.value,total,due,items:[{name:p.name,qty:q,price:p.price}]});if(sc.value){let c=db.customers.find(x=>x.name===sc.value);if(c)c.due=(c.due||0)+due}save();closeM();alert('বিক্রি সফল হয়েছে')}
+refresh();
+</script>
+</body>
+</html>
